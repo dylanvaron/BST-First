@@ -141,19 +141,64 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // Returns a list of elements from a preorder traversal
     public List<T> preorderTraverse()
     {
-        return null;
+        List<T> list = new ArrayList<>();
+        preorderHelper(root, list);
+        return list;
+    }
+    // Recursive helpermethod for preorderTraverse
+    private void preorderHelper(BinaryNode<T> node, List<T> list) {
+        // Print
+        list.add(node.getInfo());
+        // Left
+        if(node.getLeft() != null) {
+            preorderHelper(node.getLeft(), list);
+        }
+        // Right
+        if(node.getRight() != null) {
+            preorderHelper(node.getRight(), list);
+        }
     }
 
     // Returns a list of elements from an inorder traversal
     public List<T> inorderTraverse()
     {
-        return null;
+        List<T> list = new ArrayList<>();
+        inorderHelper(root, list);
+        return list;
+    }
+    // Recursive helpermethod for inorderTraverse
+    private void inorderHelper(BinaryNode<T> node, List<T> list) {
+        // Left
+        if(node.getLeft() != null) {
+            inorderHelper(node.getLeft(), list);
+        }
+        // Print
+        list.add(node.getInfo());
+        // Right
+        if(node.getRight() != null) {
+            inorderHelper(node.getRight(), list);
+        }
     }
 
     // Returns a list of elements from a postorder traversal
     public List<T> postorderTraverse()
     {
-        return null;
+        List<T> list = new ArrayList<>();
+        postorderHelper(root, list);
+        return list;
+    }
+    // Recursive helper method for postorderTraverse
+    private void postorderHelper(BinaryNode<T> node, List<T> list) {
+        // Left
+        if(node.getLeft() != null) {
+            postorderHelper(node.getLeft(), list);
+        }
+        // Right
+        if(node.getRight() != null) {
+            postorderHelper(node.getRight(), list);
+        }
+        // Print
+        list.add(node.getInfo());
     }
 
     // Removes an element e from this BST such that e.compareTo(element) == 0
