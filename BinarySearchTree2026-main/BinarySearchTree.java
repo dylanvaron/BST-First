@@ -202,16 +202,17 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     }
 
     // Removes an element e from this BST such that e.compareTo(element) == 0
-    public void remove (T element)
+    public void remove(T element)
     {
         // Edge case of empty tree
         if(root.getInfo() == null) {
             return;
         }
 
-        //Find the target node
+        // Find the target node
         BinaryNode<T> parent = null;
         BinaryNode<T> current = root;
+
         while(!current.getInfo().equals(element)) {
             // Go left
             if(element.compareTo(current.getInfo()) < 0 && current.getLeft() != null) {
@@ -230,14 +231,91 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
         }
 
         // Removing time
-        // Is leaf node
+
+        // Is a leaf node
         if(current.getLeft() == null && current.getRight() == null) {
-            
+            if(parent == null) {
+                root = null;
+            }
+            else if(parent.getLeft() == current) {
+                parent.setLeft(null);
+            }
+            else {
+                parent.setRight(null);
+            }
+        }
+
+        // Has one left child
+        else if(current.getLeft() != null && current.getRight() == null) {
+            if(parent == null) {
+                root = current.getLeft();
+            }
+            else if(parent.getLeft() == current) {
+                parent.setLeft(current.getLeft());
+            }
+            else {
+                parent.setRight(current.getLeft());
+            }
+        }
+
+        // Has one right child
+        else if(current.getLeft() == null && current.getRight() != null) {
+            if(parent == null) {
+                root = current.getRight();
+            }
+            else if(parent.getLeft() == current) {
+                parent.setLeft(current.getRight());
+            }
+            else {
+                parent.setRight(current.getRight());
+            }
+        }
+
+        // Has two children
+        else {
+            // Find the inorder successor (smallest node in right subtree)
+            BinaryNode<T> sParent = current;
+            BinaryNode<T> successor = current.getRight();
+
+            while(successor.getLeft() != null) {
+                sParent = successor;
+                successor = successor.getLeft();
+            }
+
+            // Replace current's value with successor's value
+            current.setInfo(successor.getInfo());
+
+            // Remove the successor from its original position
+            if(sParent == current) {
+                sParent.setRight(successor.getRight());
+            }
+            else {
+                sParent.setLeft(successor.getRight());
+            }
         }
     }
 
     // Restructures this BST to be optimally balanced
     public void balance()
     {
+        if(isEmpty()) {
+            return;
+        }
+
+        List<T> elements = inorderTraverse();
+        root = balanceHelper(elements, 0, elements.size() - 1);
+    }
+
+    private BinaryNode<T> balanceHelper(List<T> elements, int low, int high)
+    {
+        if(low > high) {
+            return null;
+        }
+
+        int middle = low + (high - low) / 2;
+        BinaryNode<T> node = new BinaryNode<>(elements.get(middle));
+        node.setLeft(balanceHelper(elements, low, middle - 1));
+        node.setRight(balanceHelper(elements, middle + 1, high));
+        return node;
     }
 }
