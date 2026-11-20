@@ -204,6 +204,36 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // Removes an element e from this BST such that e.compareTo(element) == 0
     public void remove (T element)
     {
+        // Edge case of empty tree
+        if(root.getInfo() == null) {
+            return;
+        }
+
+        //Find the target node
+        BinaryNode<T> parent = null;
+        BinaryNode<T> current = root;
+        while(!current.getInfo().equals(element)) {
+            // Go left
+            if(element.compareTo(current.getInfo()) < 0 && current.getLeft() != null) {
+                parent = current;
+                current = current.getLeft();
+            }
+            // Go right
+            else if(element.compareTo(current.getInfo()) > 0 && current.getRight() != null) {
+                parent = current;
+                current = current.getRight();
+            }
+            // Element does not exist
+            else {
+                return;
+            }
+        }
+
+        // Removing time
+        // Is leaf node
+        if(current.getLeft() == null && current.getRight() == null) {
+            
+        }
     }
 
     // Restructures this BST to be optimally balanced
